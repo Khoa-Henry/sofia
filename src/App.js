@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import {
+  Container,
+  CssBaseline,
+  ThemeProvider,
+  useMediaQuery,
+} from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Footer from "./components/Footer";
+import Navbar from "./components/NavBar";
+import getTheme from "./theme";
+
+import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
 
 function App() {
+  // Detect browser's preferred color scheme
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  // Set default state based on browser preference
+  const [darkMode, setDarkMode] = useState(prefersDarkMode);
+
+  // Keep in sync if browser preference changes
+  useEffect(() => {
+    setDarkMode(prefersDarkMode);
+  }, [prefersDarkMode]);
+
+  const theme = useMemo(
+    () => getTheme(darkMode ? "dark" : "light"),
+    [darkMode]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Container maxWidth="md" sx={{ minHeight: "80vh" }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Container>
+        <Footer />
+      </Router>
+    </ThemeProvider>
   );
 }
 
