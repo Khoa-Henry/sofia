@@ -38,7 +38,7 @@ function App() {
       <CssBaseline />
       <Router>
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-        <Container maxWidth="md" sx={{ minHeight: "80vh" }}>
+        <Container sx={{ minHeight: "80vh" }} style={{padding: 12}}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
